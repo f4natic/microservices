@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx
+    container_name: nginx
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - custom-net
+  user-service:
+    build:
+      context: user-service
+      dockerfile: Dockerfile
+    container_name: user-service
+    networks:
+      - custom-net
+  order-service:
+    build:
+      context: order-service
+      dockerfile: Dockerfile
+    container_name: order-service
+    networks:
+      - custom-net
+
+networks:
+  custom-net:
+    name: "microservices"
+    driver: bridge
