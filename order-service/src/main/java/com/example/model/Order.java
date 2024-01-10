@@ -13,6 +13,30 @@ public class Order {
     @Column(name = "products")
     private String products;
 
-    @Column(name = "user_id")
-    private long user_id;
+    @Column(name = "user_email")
+    private String userEmail;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getProducts() {
+        return products;
+    }
+
+    public void setProducts(String products) {
+        this.products = products;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String user_email) {
+        this.userEmail = user_email;
+    }
 }

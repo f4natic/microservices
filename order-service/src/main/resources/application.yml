@@ -16,3 +16,6 @@ spring:
   h2:
     console:
       enabled: true
+
+user-service:
+  url: "http://localhost:8080/rest/v1/api/user-service"

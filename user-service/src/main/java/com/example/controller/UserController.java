@@ -14,8 +14,8 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/{email}")
-    public User findUserByEmail(@PathVariable String email) {
+    @GetMapping("/email")
+    public User findUserByEmail(@RequestParam String email) {
         return userService.findUserByEmail(email);
     }
 
