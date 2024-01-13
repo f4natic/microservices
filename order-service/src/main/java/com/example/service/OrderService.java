@@ -15,21 +15,30 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Optional;
 
 @Service
-public class OrderService {
+public class OrderService implements IService<Order> {
     private static final Logger logger = LogManager.getLogger(OrderService.class);
 
     @Value("${user-service.url}")
     private String userServiceUrl;
 
-    @Autowired
     private OrderRepository orderRepository;
 
-    public Order findOrderById(long id) {
+    @Autowired
+    public OrderService(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
+    }
+
+    @Override
+    public Order findById(Long id) {
         Optional<Order> optional = orderRepository.findById(id);
+        if(optional.isEmpty()) {
+            throw new OrderException(String.format("Order with ID: %s, not found in DB", id));
+        }
         return optional.get();
     }
 
-    public Order createOrder(Order order) {
+    @Override
+    public Order save(Order order) {
         RestTemplate restTemplate = new RestTemplate();
         String uri = String.format("%s/users/email?email=%s", userServiceUrl, order.getUserEmail());
         logger.info(String.format("Connect with user-service on uri: %s", uri));
@@ -41,7 +50,7 @@ public class OrderService {
                 throw new OrderException(String.format("User with email:%s, not found", order.getUserEmail()));
             }
         }catch (Exception e) {
-            throw new OrderException("Something went wrong, when getting user");
+            throw new OrderException("Problem with connection");
         }
         return orderRepository.save(order);
     }

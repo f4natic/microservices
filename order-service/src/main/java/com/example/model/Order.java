@@ -1,5 +1,6 @@
 package com.example.model;
 
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 
 @Entity
@@ -38,5 +39,59 @@ public class Order {
 
     public void setUserEmail(String user_email) {
         this.userEmail = user_email;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Order order = (Order) o;
+
+        if (!products.equals(order.products)) return false;
+        return userEmail.equals(order.userEmail);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = products.hashCode();
+        result = 31 * result + userEmail.hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", products='" + products + '\'' +
+                ", userEmail='" + userEmail + '\'' +
+                '}';
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private Order order;
+
+        private Builder() {
+            order = new Order();
+        }
+
+        public Builder product(@Nonnull String products) {
+            order.setProducts(products);
+            return this;
+        }
+
+        public Builder userEmail(@Nonnull String userEmail) {
+            order.setUserEmail(userEmail);
+            return this;
+        }
+
+        public Order build() {
+            return order;
+        }
     }
 }
